@@ -17,6 +17,8 @@
 <meta name="twitter:title" content="Alzhan Armanuly">
 <meta name="twitter:description" content="21 years old, 24 countries. Security engineer turned founder.">
 <meta name="twitter:image" content="https://flyingstraus.github.io/photos/preview.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230d1310'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%237cf08a'/%3E%3C/svg%3E">
+<script>document.documentElement.classList.add("js");</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
@@ -96,6 +98,17 @@
   .carousel img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
   .carousel figure:hover img { transform: scale(1.04); }
   .sail-text { color: var(--muted); margin: 14px 0 0; }
+  .carousel-wrap { position: relative; }
+  .nav {
+    display: none; position: absolute; top: calc(50% - 4px); transform: translateY(-50%);
+    width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line);
+    background: rgba(13, 19, 16, 0.85); color: var(--text); font: 24px/1 'Space Grotesk', sans-serif;
+    cursor: pointer; transition: border-color 0.2s;
+  }
+  .nav:hover { border-color: var(--accent); }
+  .prev { left: 10px; } .next { right: 10px; }
+  @media (hover: hover) and (pointer: fine) { .nav { display: block; } }
+  .latest.no-map { grid-template-columns: 1fr; }
 
   /* contact */
   .contact { border-top: 1px solid var(--line); padding-top: 32px; }
@@ -108,13 +121,13 @@
   .buttons a:hover { border-color: var(--accent); }
 
   /* motion */
-  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
-  .reveal.in { opacity: 1; transform: none; }
+  .js .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .js .reveal.in { opacity: 1; transform: none; }
   .pin { fill: var(--accent); }
   .pulse { fill: var(--accent); transform-box: fill-box; transform-origin: center; animation: pulse 2s ease-out infinite; }
   @keyframes pulse { from { opacity: 0.6; transform: scale(1); } to { opacity: 0; transform: scale(4); } }
   @media (prefers-reduced-motion: reduce) {
-    .reveal { opacity: 1; transform: none; transition: none; }
+    .js .reveal { opacity: 1; transform: none; transition: none; }
     .pulse { animation: none; opacity: 0; }
   }
   @media (max-width: 620px) {
@@ -132,7 +145,7 @@
     <img class="avatar" src="photos/me.jpg" alt="Alzhan Armanuly" onerror="this.style.visibility='hidden'">
     <div>
       <p class="label">Alzhan Armanuly</p>
-      <h1>21 years old.<br>24 countries.</h1>
+      <h1>21 years old.<br><span id="headline-count">24</span> countries.</h1>
       <p class="sub">Security engineer turned founder · Kazakh, Russian, English</p>
     </div>
   </header>
@@ -183,7 +196,7 @@
       <li class="now">
         <span class="when">21 · 2026 · now</span>
         <h3>Building my own startup</h3>
-        <p>Spoke on the EthCC main stage in Cannes, then left to build something of my own. Won a ShanHaiWoo scholarship and came to Shenzhen for AI and hardware: visiting factories, building with AI glasses, and drafting my first video series.</p>
+        <p>Spoke on the EthCC main stage in Cannes about the most interesting bugs reported to bug bounty programs, then left to build something of my own. In Shenzhen I built an AI airport guide for smart glasses at a 72-hour AI and hardware hackathon.</p>
       </li>
     </ol>
     <p class="strip">Worked on bugs for Aave · Chainlink · Lido · LayerZero · Compound · Optimism · Ethena · 1inch · Gearbox</p>
@@ -208,7 +221,11 @@
 
   <section class="reveal">
     <p class="label">sailing · captain licence · 7 regattas in 3 countries</p>
-    <div class="carousel" id="carousel"></div>
+    <div class="carousel-wrap">
+      <div class="carousel" id="carousel"></div>
+      <button class="nav prev" type="button" aria-label="Previous photo">‹</button>
+      <button class="nav next" type="button" aria-label="Next photo">›</button>
+    </div>
     <p class="sail-text">A new crew every race. Under stress you see who people really are. Next: crossing the Atlantic.</p>
   </section>
 
@@ -233,7 +250,8 @@
       "Cyprus", "Northern Cyprus", "United Arab Emirates", "Qatar", "Bahrain", "Saudi Arabia",
       "United Kingdom", "Belgium", "France", "Monaco", "Germany", "Italy", "Spain", "Portugal",
       "Argentina", "Brazil"],
-    // Next country: shown in a lighter colour. Move it into `visited` once you land.
+    // Next country: shown in a lighter colour. Move it into `visited` once you land
+    // (the headline and the map label count `visited` by themselves; the preview text in <head> doesn't).
     soon: ["India"],
     // Sailing photos in photos/ — file names; empty slots show a placeholder.
     sailing: ["regatta-1.jpg", "regatta-2.jpg"],
@@ -243,6 +261,7 @@
   document.getElementById("latest-date").textContent = "latest · " + SITE.latestDate;
   document.getElementById("where").textContent = SITE.location.city + ", " + SITE.location.country;
   document.getElementById("country-count").textContent = SITE.visited.length;
+  document.getElementById("headline-count").textContent = SITE.visited.length;
   document.getElementById("country-list").textContent = SITE.visited.join(" · ") +
     (SITE.soon.length ? " · next: " + SITE.soon.join(", ") : "");
 
@@ -256,6 +275,12 @@
     img.src = "photos/" + file;
     carousel.appendChild(fig);
   });
+  const step = dir => {
+    const fig = carousel.querySelector("figure");
+    if (fig) carousel.scrollBy({ left: dir * (fig.offsetWidth + 12), behavior: "smooth" });
+  };
+  document.querySelector(".nav.prev").addEventListener("click", () => step(-1));
+  document.querySelector(".nav.next").addEventListener("click", () => step(1));
 
   const io = new IntersectionObserver(entries => entries.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
@@ -265,7 +290,14 @@
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script>
-  d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json").then(world => {
+  // Map data or scripts didn't load: hide the empty maps, keep the country list
+  const hideMaps = () => {
+    document.getElementById("mini-map").style.display = "none";
+    document.querySelector(".latest").classList.add("no-map");
+    document.getElementById("world").style.display = "none";
+  };
+  if (!window.d3 || !window.topojson) hideMaps();
+  else d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json").then(world => {
     const land = topojson.feature(world, world.objects.countries);
     const atlasName = n => ({ "Northern Cyprus": "N. Cyprus" })[n] || n;
     const visited = new Set(SITE.visited.map(atlasName));
@@ -284,18 +316,24 @@
       .attr("fill", fillFor)
       .attr("stroke", "#0d1310").attr("stroke-width", 0.5);
 
-    // Mini map centred on the current location
-    const m = d3.select("#mini-map");
-    const box = m.node().getBoundingClientRect();
-    const { lon, lat } = SITE.location;
-    const mp = d3.geoMercator().center([lon, lat]).scale(box.width * 1.3).translate([box.width / 2, box.height / 2]);
-    m.attr("viewBox", `0 0 ${box.width} ${box.height}`);
-    m.selectAll("path").data(land.features).join("path")
-      .attr("d", d3.geoPath(mp)).attr("fill", landColor).attr("stroke", "#0d1310").attr("stroke-width", 0.5);
-    const [x, y] = mp([lon, lat]);
-    m.append("circle").attr("class", "pulse").attr("cx", x).attr("cy", y).attr("r", 5);
-    m.append("circle").attr("class", "pin").attr("cx", x).attr("cy", y).attr("r", 5);
-  });
+    // Mini map centred on the current location; redrawn when the window size changes
+    const drawMini = () => {
+      const m = d3.select("#mini-map");
+      m.selectAll("*").remove();
+      const box = m.node().getBoundingClientRect();
+      const { lon, lat } = SITE.location;
+      const mp = d3.geoMercator().center([lon, lat]).scale(box.width * 1.3).translate([box.width / 2, box.height / 2]);
+      m.attr("viewBox", `0 0 ${box.width} ${box.height}`);
+      m.selectAll("path").data(land.features).join("path")
+        .attr("d", d3.geoPath(mp)).attr("fill", landColor).attr("stroke", "#0d1310").attr("stroke-width", 0.5);
+      const [x, y] = mp([lon, lat]);
+      m.append("circle").attr("class", "pulse").attr("cx", x).attr("cy", y).attr("r", 5);
+      m.append("circle").attr("class", "pin").attr("cx", x).attr("cy", y).attr("r", 5);
+    };
+    drawMini();
+    let resizeTimer;
+    addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(drawMini, 150); });
+  }).catch(hideMaps);
 </script>
 </body>
 </html>
