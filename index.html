@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alzhan Armanuly</title>
+<meta name="description" content="21 years old, 24 countries. Security engineer turned founder.">
+<meta property="og:title" content="Alzhan Armanuly">
+<meta property="og:description" content="21 years old, 24 countries. Security engineer turned founder.">
+<meta property="og:image" content="photos/me.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1310; --panel: #141c17; --line: #26332b;
+    --text: #eaf2ec; --muted: #9fb3a6; --faint: #6e8276;
+    --accent: #7cf08a; --land: #26332b; --land-on: #7cf08a;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: 'Space Grotesk', Arial, sans-serif; font-size: 17px; line-height: 1.65;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 72px 20px 96px; }
+  .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--faint);
+    letter-spacing: 0.04em; margin: 0 0 14px;
+  }
+  section { margin-top: 72px; }
+  a { color: var(--text); text-decoration-color: var(--faint); text-underline-offset: 3px; }
+  a:hover { color: var(--accent); }
+
+  /* hero */
+  .hero { display: flex; gap: 22px; align-items: center; }
+  .avatar {
+    width: 96px; height: 96px; border-radius: 50%; flex: none; object-fit: cover;
+    background: var(--panel); border: 1px solid var(--line);
+  }
+  h1 { font-size: clamp(36px, 7vw, 56px); line-height: 1.05; margin: 4px 0 8px; letter-spacing: -0.02em; }
+  .sub { color: var(--muted); margin: 0; }
+
+  /* latest */
+  .latest {
+    margin-top: 40px; border: 1px solid #2f5a37; border-radius: 16px; padding: 18px;
+    display: grid; grid-template-columns: minmax(0, 1fr) 240px; gap: 18px; align-items: center;
+  }
+  .latest .label { color: var(--accent); margin-bottom: 8px; }
+  .latest ul { margin: 0; padding-left: 18px; }
+  .where { font-weight: 500; margin: 0 0 6px; }
+  #mini-map { width: 100%; height: 170px; border-radius: 10px; background: var(--panel); }
+  .ai { display: flex; gap: 12px; margin-top: 22px; color: var(--muted); }
+  .ai span:first-child { color: var(--accent); font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
+
+  /* timeline */
+  .tl { list-style: none; margin: 0; padding: 0; }
+  .tl li { position: relative; padding: 0 0 34px 34px; border-left: 1px solid var(--line); margin-left: 6px; }
+  .tl li:last-child { border-left-color: transparent; padding-bottom: 0; }
+  .tl li::before {
+    content: ""; position: absolute; left: -6px; top: 6px; width: 11px; height: 11px;
+    border-radius: 50%; background: var(--text);
+  }
+  .tl li.now::before { background: var(--accent); box-shadow: 0 0 0 5px rgba(124, 240, 138, 0.18); }
+  .tl .when { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--faint); }
+  .tl li.now .when { color: var(--accent); }
+  .tl h3 { font-size: 21px; font-weight: 500; margin: 2px 0 6px; }
+  .tl p { margin: 0; color: var(--muted); }
+  .strip { margin-top: 26px; font-size: 14px; color: var(--faint); }
+
+  /* talks */
+  .talks { list-style: none; margin: 0; padding: 0; }
+  .talks li { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+  .talks li span:last-child { color: var(--faint); font-family: 'JetBrains Mono', monospace; font-size: 14px; }
+
+  /* map */
+  .wide { width: 100%; aspect-ratio: 16 / 8; object-fit: cover; border-radius: 14px; display: block; margin-bottom: 20px; }
+  #world { width: 100%; height: auto; display: block; }
+  .map-note { font-size: 14px; color: var(--faint); margin-top: 10px; }
+
+  /* carousel */
+  .carousel { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: thin; }
+  .carousel figure {
+    flex: 0 0 78%; margin: 0; scroll-snap-align: start; aspect-ratio: 4 / 3; border-radius: 14px;
+    background: var(--panel); border: 1px solid var(--line); overflow: hidden;
+    display: flex; align-items: center; justify-content: center; color: var(--faint); font-size: 14px;
+  }
+  .carousel img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+  .carousel figure:hover img { transform: scale(1.04); }
+  .sail-text { color: var(--muted); margin: 14px 0 0; }
+
+  /* contact */
+  .contact { border-top: 1px solid var(--line); padding-top: 32px; }
+  .contact h2 { font-size: 28px; font-weight: 500; margin: 0 0 16px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+  .buttons a {
+    text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 9px 18px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .buttons a:hover { border-color: var(--accent); }
+
+  /* motion */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  .pin { fill: var(--accent); }
+  .pulse { fill: var(--accent); transform-box: fill-box; transform-origin: center; animation: pulse 2s ease-out infinite; }
+  @keyframes pulse { from { opacity: 0.6; transform: scale(1); } to { opacity: 0; transform: scale(4); } }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .pulse { animation: none; opacity: 0; }
+  }
+  @media (max-width: 620px) {
+    main { padding-top: 48px; }
+    .hero { flex-direction: column; align-items: flex-start; }
+    .latest { grid-template-columns: 1fr; }
+    .carousel figure { flex-basis: 88%; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <header class="hero reveal">
+    <img class="avatar" src="photos/me.jpg" alt="Alzhan Armanuly" onerror="this.style.visibility='hidden'">
+    <div>
+      <p class="label">Alzhan Armanuly</p>
+      <h1>21 years old.<br>24 countries.</h1>
+      <p class="sub">Security engineer turned founder · Kazakh, Russian, English</p>
+    </div>
+  </header>
+
+  <div class="latest reveal">
+    <div>
+      <p class="label" id="latest-date"></p>
+      <p class="where">Now: <span id="where"></span></p>
+      <ul>
+        <li>Came to Shenzhen on a ShanHaiWoo scholarship to explore AI, hardware and the factories here</li>
+        <li>Building my own startup</li>
+        <li>Drafting a video series: nobody is ever ready, and everything starts with a tiny step</li>
+      </ul>
+    </div>
+    <svg id="mini-map" role="img" aria-label="Map showing where Alzhan is now"></svg>
+  </div>
+
+  <p class="ai reveal"><span>AI-native</span><span>Every day starts and ends in my own second brain: a team of AI agents that plans my day, drafts my messages and keeps every task.</span></p>
+
+  <section class="reveal">
+    <p class="label">the story so far</p>
+    <ol class="tl">
+      <li>
+        <span class="when">16 · 2021</span>
+        <h3>First job in crypto</h3>
+        <p>Started as a copywriter in crypto while still at school. Taught myself Python on the side, built bots that minted and listed NFTs, then bot farms for crypto games, and sold them.</p>
+      </li>
+      <li>
+        <span class="when">17 · 2022</span>
+        <h3>Moved abroad for uni</h3>
+        <p>Left Kazakhstan to study software engineering at METU in Northern Cyprus. Took a free internship at a security firm to learn the craft.</p>
+      </li>
+      <li>
+        <span class="when">18 · 2023</span>
+        <h3>Full-time security auditor</h3>
+        <p>Got a full-time job auditing smart contracts while still at uni. Became a top 2 auditor in private contests, finding bugs in protocols holding $12B.</p>
+      </li>
+      <li>
+        <span class="when">19 · 2024</span>
+        <h3>Bangkok in the middle of midterms</h3>
+        <p>Found a critical bug a day before a protocol went live. Flew from Cyprus to Devcon Bangkok in the middle of exams, flew 21 hours back, sat the exam at 8 a.m. and scored 80 against an average of 40. Soon after, I dropped out to join Immunefi.</p>
+      </li>
+      <li>
+        <span class="when">20 · 2025</span>
+        <h3>On the front line of crypto security</h3>
+        <p>At the biggest bug bounty platform in web3 I judged thousands of bug reports for protocols holding $180B, and joined war rooms during live attacks, helping secure $100M+. Won ETHGlobal, spoke at Devconnect in Buenos Aires, and worked from 18 countries in one year.</p>
+      </li>
+      <li class="now">
+        <span class="when">21 · 2026 · now</span>
+        <h3>Building my own startup</h3>
+        <p>Spoke on the EthCC main stage in Cannes, then left to build something of my own. Won a ShanHaiWoo scholarship and came to Shenzhen for AI and hardware: visiting factories, building with AI glasses, and drafting my first video series.</p>
+      </li>
+    </ol>
+    <p class="strip">Worked on bugs for Aave · Chainlink · Lido · LayerZero · Compound · Optimism · Ethena · 1inch · Gearbox</p>
+  </section>
+
+  <section class="reveal">
+    <p class="label">talks</p>
+    <ul class="talks">
+      <li><span>EthCC[9] · Cannes</span><span>2026</span></li>
+      <li><span><a href="https://x.com/ileanamalacrino/status/1990897334750793892" target="_blank" rel="noopener">Devconnect side events · Buenos Aires</a></span><span>2025</span></li>
+      <li><span>Ethereum Foundation–sponsored event · Black Ice hackerspace</span><span>2025</span></li>
+      <li><span><a href="https://www.youtube.com/watch?v=6Lomw4dcbh8" target="_blank" rel="noopener">KazHackStan</a></span><span>2024</span></li>
+    </ul>
+  </section>
+
+  <section class="reveal">
+    <p class="label"><span id="country-count"></span> countries · lived in 4</p>
+    <img class="wide" src="photos/glacier.jpg" alt="Alzhan on a boat in front of a glacier">
+    <svg id="world" viewBox="0 0 960 480" role="img" aria-label="World map of the countries Alzhan has visited"></svg>
+    <p class="map-note" id="country-list"></p>
+  </section>
+
+  <section class="reveal">
+    <p class="label">sailing · captain licence · 7 regattas in 3 countries</p>
+    <div class="carousel" id="carousel"></div>
+    <p class="sail-text">A new crew every race. Under stress you see who people really are. Next: crossing the Atlantic.</p>
+  </section>
+
+  <section class="contact reveal">
+    <h2>Building something new. Let’s talk.</h2>
+    <div class="buttons">
+      <a href="https://t.me/Straus_fm" target="_blank" rel="noopener">Telegram</a>
+      <a href="https://www.linkedin.com/in/aarmanuly/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:indifialzhan@gmail.com">Email</a>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // ---- Edit these lines to update the site ----
+  const SITE = {
+    latestDate: "25 Oct 2026",
+    location: { city: "Shenzhen", country: "China", lon: 114.06, lat: 22.54 },
+    // Visited countries, by name. Tiny ones (Bahrain, Monaco) are too small for the map and show in the list only.
+    visited: ["Kazakhstan", "Kyrgyzstan", "China", "Vietnam", "Thailand", "Malaysia", "Georgia", "Turkey",
+      "Cyprus", "Northern Cyprus", "United Arab Emirates", "Qatar", "Bahrain", "Saudi Arabia",
+      "United Kingdom", "Belgium", "France", "Monaco", "Germany", "Italy", "Spain", "Portugal",
+      "Argentina", "Brazil"],
+    // Next country: shown in a lighter colour. Move it into `visited` once you land.
+    soon: ["India"],
+    // Sailing photos in photos/ — file names; empty slots show a placeholder.
+    sailing: ["regatta-1.jpg", "regatta-2.jpg"],
+  };
+  // ----------------------------------------------
+
+  document.getElementById("latest-date").textContent = "latest · " + SITE.latestDate;
+  document.getElementById("where").textContent = SITE.location.city + ", " + SITE.location.country;
+  document.getElementById("country-count").textContent = SITE.visited.length;
+  document.getElementById("country-list").textContent = SITE.visited.join(" · ") +
+    (SITE.soon.length ? " · next: " + SITE.soon.join(", ") : "");
+
+  const carousel = document.getElementById("carousel");
+  SITE.sailing.forEach((file, i) => {
+    const fig = document.createElement("figure");
+    fig.textContent = "Regatta photo " + (i + 1);
+    const img = new Image();
+    img.alt = "Regatta photo " + (i + 1);
+    img.onload = () => { fig.textContent = ""; fig.appendChild(img); };
+    img.src = "photos/" + file;
+    carousel.appendChild(fig);
+  });
+
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+  }), { threshold: 0.12 });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+</script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script>
+  d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json").then(world => {
+    const land = topojson.feature(world, world.objects.countries);
+    const atlasName = n => ({ "Northern Cyprus": "N. Cyprus" })[n] || n;
+    const visited = new Set(SITE.visited.map(atlasName));
+    const soon = new Set(SITE.soon.map(atlasName));
+    const css = getComputedStyle(document.documentElement);
+    const landColor = css.getPropertyValue("--land").trim();
+    const onColor = css.getPropertyValue("--land-on").trim();
+    const fillFor = d => visited.has(d.properties.name) ? onColor
+      : soon.has(d.properties.name) ? "#3f7a49" : landColor;
+
+    // World map of visited countries
+    const w = d3.select("#world");
+    const proj = d3.geoNaturalEarth1().fitSize([960, 480], { type: "Sphere" });
+    w.selectAll("path").data(land.features).join("path")
+      .attr("d", d3.geoPath(proj))
+      .attr("fill", fillFor)
+      .attr("stroke", "#0d1310").attr("stroke-width", 0.5);
+
+    // Mini map centred on the current location
+    const m = d3.select("#mini-map");
+    const box = m.node().getBoundingClientRect();
+    const { lon, lat } = SITE.location;
+    const mp = d3.geoMercator().center([lon, lat]).scale(box.width * 1.3).translate([box.width / 2, box.height / 2]);
+    m.attr("viewBox", `0 0 ${box.width} ${box.height}`);
+    m.selectAll("path").data(land.features).join("path")
+      .attr("d", d3.geoPath(mp)).attr("fill", landColor).attr("stroke", "#0d1310").attr("stroke-width", 0.5);
+    const [x, y] = mp([lon, lat]);
+    m.append("circle").attr("class", "pulse").attr("cx", x).attr("cy", y).attr("r", 5);
+    m.append("circle").attr("class", "pin").attr("cx", x).attr("cy", y).attr("r", 5);
+  });
+</script>
+</body>
+</html>
