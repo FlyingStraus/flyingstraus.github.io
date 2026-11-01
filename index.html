@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Alzhan Armanuly</title>
-<meta name="description" content="21 years old, 24 countries. Security engineer turned founder.">
+<meta name="description" content="21 years old, 25 countries. Security engineer turned founder.">
 <meta property="og:title" content="Alzhan Armanuly">
-<meta property="og:description" content="21 years old, 24 countries. Security engineer turned founder.">
+<meta property="og:description" content="21 years old, 25 countries. Security engineer turned founder.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://flyingstraus.github.io/">
 <meta property="og:image" content="https://flyingstraus.github.io/photos/preview.jpg">
@@ -15,7 +15,7 @@
 <meta property="og:image:alt" content="Alzhan on a boat in front of a glacier">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Alzhan Armanuly">
-<meta name="twitter:description" content="21 years old, 24 countries. Security engineer turned founder.">
+<meta name="twitter:description" content="21 years old, 25 countries. Security engineer turned founder.">
 <meta name="twitter:image" content="https://flyingstraus.github.io/photos/preview.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230d1310'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%237cf08a'/%3E%3C/svg%3E">
 <script>document.documentElement.classList.add("js");</script>
@@ -87,6 +87,11 @@
   .wide { width: 100%; aspect-ratio: 16 / 8; object-fit: cover; border-radius: 14px; display: block; margin-bottom: 20px; }
   #world { width: 100%; height: auto; display: block; }
   .map-note { font-size: 14px; color: var(--faint); margin-top: 10px; }
+  .stops { list-style: none; margin: 0; padding: 0; }
+  .stops li { display: flex; gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--line); color: var(--muted); }
+  .stops .when { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--faint); flex: none; width: 76px; padding-top: 3px; }
+  .stops .city { color: var(--text); }
+  .stops li.now .when, .stops li.now .city { color: var(--accent); }
 
   /* carousel */
   .carousel { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: thin; }
@@ -145,7 +150,7 @@
     <img class="avatar" src="photos/me.jpg" alt="Alzhan Armanuly" onerror="this.style.visibility='hidden'">
     <div>
       <p class="label">Alzhan Armanuly</p>
-      <h1>21 years old.<br><span id="headline-count">24</span> countries.</h1>
+      <h1>21 years old.<br><span id="headline-count">25</span> countries.</h1>
       <p class="sub">Security engineer turned founder · Kazakh, Russian, English</p>
     </div>
   </header>
@@ -155,7 +160,7 @@
       <p class="label" id="latest-date"></p>
       <p class="where">Now: <span id="where"></span></p>
       <ul>
-        <li>Came to Shenzhen on a ShanHaiWoo scholarship to explore AI, hardware and the factories here</li>
+        <li>In Mumbai for Devcon and the DeFi Security Summit</li>
         <li>Building my own startup</li>
         <li>Drafting a video series: nobody is ever ready, and everything starts with a tiny step</li>
       </ul>
@@ -220,6 +225,11 @@
   </section>
 
   <section class="reveal">
+    <p class="label">where I've been lately · the dashed line on the map</p>
+    <ul class="stops" id="stops"></ul>
+  </section>
+
+  <section class="reveal">
     <p class="label">sailing · captain licence · 7 regattas in 3 countries</p>
     <div class="carousel-wrap">
       <div class="carousel" id="carousel"></div>
@@ -243,27 +253,51 @@
 <script>
   // ---- Edit these lines to update the site ----
   const SITE = {
-    latestDate: "25 Oct 2026",
-    location: { city: "Shenzhen", country: "China", lon: 114.06, lat: 22.54 },
+    latestDate: "1 Nov 2026",
+    // Where I've been, oldest first. The last line is where I am now (the "Now:" box and the pin).
+    // Moving? Add one line at the bottom.
+    history: [
+      { when: "Oct 2026", city: "Astana", country: "Kazakhstan", lon: 71.45, lat: 51.17, note: "Network School" },
+      { when: "Oct 2026", city: "Shenzhen", country: "China", lon: 114.06, lat: 22.54, note: "ShanHaiWoo scholarship: AI, hardware, factories" },
+      { when: "Nov 2026", city: "Mumbai", country: "India", lon: 72.88, lat: 19.08, note: "Devcon and the DeFi Security Summit" },
+    ],
     // Visited countries, by name. Tiny ones (Bahrain, Monaco) are too small for the map and show in the list only.
     visited: ["Kazakhstan", "Kyrgyzstan", "China", "Vietnam", "Thailand", "Malaysia", "Georgia", "Turkey",
       "Cyprus", "Northern Cyprus", "United Arab Emirates", "Qatar", "Bahrain", "Saudi Arabia",
       "United Kingdom", "Belgium", "France", "Monaco", "Germany", "Italy", "Spain", "Portugal",
-      "Argentina", "Brazil"],
+      "Argentina", "Brazil", "India"],
     // Next country: shown in a lighter colour. Move it into `visited` once you land
     // (the headline and the map label count `visited` by themselves; the preview text in <head> doesn't).
-    soon: ["India"],
+    soon: [],
     // Sailing photos in photos/ — file names; empty slots show a placeholder.
     sailing: ["regatta-1.jpg", "regatta-2.jpg"],
   };
   // ----------------------------------------------
 
+  SITE.location = SITE.history[SITE.history.length - 1];
   document.getElementById("latest-date").textContent = "latest · " + SITE.latestDate;
   document.getElementById("where").textContent = SITE.location.city + ", " + SITE.location.country;
   document.getElementById("country-count").textContent = SITE.visited.length;
   document.getElementById("headline-count").textContent = SITE.visited.length;
   document.getElementById("country-list").textContent = SITE.visited.join(" · ") +
     (SITE.soon.length ? " · next: " + SITE.soon.join(", ") : "");
+
+  // Newest stop first
+  const stops = document.getElementById("stops");
+  SITE.history.slice().reverse().forEach((s, i) => {
+    const li = document.createElement("li");
+    if (i === 0) li.className = "now";
+    const when = document.createElement("span");
+    when.className = "when";
+    when.textContent = i === 0 ? "now" : s.when;
+    const what = document.createElement("span");
+    const city = document.createElement("span");
+    city.className = "city";
+    city.textContent = s.city + ", " + s.country;
+    what.append(city, s.note ? " · " + s.note : "");
+    li.append(when, what);
+    stops.appendChild(li);
+  });
 
   const carousel = document.getElementById("carousel");
   SITE.sailing.forEach((file, i) => {
@@ -315,6 +349,23 @@
       .attr("d", d3.geoPath(proj))
       .attr("fill", fillFor)
       .attr("stroke", "#0d1310").attr("stroke-width", 0.5);
+
+    // Route through the recent stops, newest one pulsing
+    const route = SITE.history.map(s => [s.lon, s.lat]);
+    const line = { type: "LineString", coordinates: route };
+    // Dark halo under white dashes, so the line shows on green and dark land alike
+    w.append("path").datum(line).attr("d", d3.geoPath(proj)).attr("fill", "none")
+      .attr("stroke", "#0d1310").attr("stroke-width", 4.5).attr("stroke-linecap", "round");
+    w.append("path").datum(line).attr("d", d3.geoPath(proj)).attr("fill", "none")
+      .attr("stroke", "#eaf2ec").attr("stroke-width", 1.8).attr("stroke-dasharray", "4 4");
+    route.forEach((p, i) => {
+      const [x, y] = proj(p);
+      const last = i === route.length - 1;
+      // White, not green: the pins sit on green (visited) countries
+      if (last) w.append("circle").attr("class", "pulse").style("fill", "#eaf2ec").attr("cx", x).attr("cy", y).attr("r", 5.5);
+      w.append("circle").attr("fill", "#eaf2ec").attr("stroke", "#0d1310").attr("stroke-width", last ? 1.5 : 1)
+        .attr("cx", x).attr("cy", y).attr("r", last ? 5.5 : 3.5);
+    });
 
     // Mini map centred on the current location; redrawn when the window size changes
     const drawMini = () => {
